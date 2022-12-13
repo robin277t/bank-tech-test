@@ -1,16 +1,27 @@
 # README SECTIONS: 
 
 ## Overview:
-    TODO// Explanation of what program does
+    TODO//Explanation of what program does
 
 ## Installation:
-    TODO// Installation instructions
+    These instructions are for MacOS. To run on linux or windows please lookup alternative commands to install and initiate node package manager.
+    
+    1. Clone this repo and navigate to the directory where it's stored and into 'bank-test'
+    2. Check you have node.js installed using 'node -v' if this returns a version number you are good to go.
+    3. If no version number returned, either download package from nodejs.org or run 'brew install node' if you have homebrew installed.
+    4. Once you have node, run 'npm install'
 
 ## Running the app:
-    TODO// App running instructions
+     *In your terminal, assuming the above installation and directory navigation: 
+     *Type 'node' and press enter. This will enter you into the node REPL.
+     *Type '.load app.js' and press enter. This will load the bank app into the REPL.
+     *Type 'newAccount = new Account' and press enter, which will create a new account called newAccount and allow you to use the app. The instructions are relevant to any account name (the 'newAccount' as above is flexible), so to follow them please prefix any function name with 'newAccount.' or whatever you chose.
+    *If at any time you wish to see the instructions again, type 'newAccount.instructions' Remember to prefix any functions you run with 'newAccount.'
+     To close the app and exit the REPL, type '.exit'
 
 ## Running the tests:
-    TODO// Test run instructions
+    In your terminal in the bank-test directory, type 'jest --coverage' You should expect xx passing tests and xx% coverage
+
 
 ## Notes
     --Negative numbers: Whilst out of keeping with how real-world bank accounts work, this app allows negative balances on the account and repeated/unlimited withdrawals, as a requirement to manage such situations is not in the requirements at present. 

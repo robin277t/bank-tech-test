@@ -9,6 +9,14 @@ class Account {
     //TODO improve instruction printing out to the REPL
     console.log(this.instructions);
   }
+
+  deposit(amount) {
+    this.accountBalance += amount;
+  }
+
+  withdraw(amount) {
+    this.accountBalance -= amount;
+  }
 }
 
 module.exports = Account;

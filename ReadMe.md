@@ -90,11 +90,10 @@ Class 'Account' (this will be the only class)
 
     Test Block 4: print statements
     --before each instantiate new Account--
-        15 - call printStatement > expect Console.log toHaveBeenCalledOnceWith (...string value here...)
-        16 - deposit 100, 2022/01/01, call printStatement > expect line 1 === "date || debit || credit || balance"
-        17 - deposit 100, 2022/01/01, call printStatement > expect line 2 === "2022/01/01 || 100.00 ||  || 100.00"
-        18 - withdraw 400.50, 2022/01/04, call printStatement > expect line 2 === "2022/01/04 || || 400.50 || -400.50"
-        19 - withdraw 400, 2022/01/05, deposit 700.25, 2022/01/06, call printStatement > expect === "date || debit || credit || balance\n2022/01/05 || || 400.00 || -400.00\n2022/01/06 || 700.25 ||  || 300.25
+        15 - deposit 100, 2022/01/01, call printStatement > expect line 1 === "date || debit || credit || balance"
+        16 - deposit 100, 2022/01/01, call printStatement > expect line 2 === "2022/01/01 || 100.00 ||  || 100.00"
+        17 - withdraw 400.50, 2022/01/04, call printStatement > expect line 2 === "2022/01/04 || || 400.50 || -400.50"
+        18 - withdraw 400, 2022/01/05, deposit 700.25, 2022/01/06, call printStatement > expect === "date || debit || credit || balance\n2022/01/05 || || 400.00 || -400.00\n2022/01/06 || 700.25 ||  || 300.25
 
 
 

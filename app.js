@@ -6,7 +6,6 @@ class Account {
         deposit('YYYY/MM/DD', number)
         withdraw('YYYY/MM/DD', number)
         printStatement()`;
-    //TODO improve instruction printing out to the REPL
     console.log(this.instructions);
   }
 
@@ -21,12 +20,35 @@ class Account {
   }
 
   createLogRecord(logType, amount, date) {
-    let record = { date: date, deposit: amount, balance: this.accountBalance };
+    let record = {
+      date: date,
+      deposit: amount,
+      balance: this.accountBalance,
+    };
     if (logType === "withdraw") {
       record.withdraw = record.deposit;
       delete record.deposit;
     }
     this.transactionLog.push(record);
+    this.transactionLog.sort((a, b) => {
+      return a.date < b.date ? 1 : b.date < a.date ? -1 : 0;
+    });
+  }
+
+  printStatement() {
+    let statement = "date || debit || credit || balance";
+    let transactionTypePrint;
+    this.transactionLog.forEach((record) => {
+      if (record.deposit) {
+        transactionTypePrint = `${record.deposit.toFixed(2)} || `;
+      } else {
+        transactionTypePrint = ` || ${record.withdraw.toFixed(2)}`;
+      }
+      statement += `\n${
+        record.date
+      } || ${transactionTypePrint} || ${record.balance.toFixed(2)}`;
+    });
+    return statement;
   }
 }
 

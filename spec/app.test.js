@@ -26,7 +26,7 @@ describe("Block 2: Desposit and Withdraw", () => {
   });
   it("4- deposit 100 once", () => {
     accountTest.deposit(100);
-    expect(accountTest.accountBalance).toBe(100);
+    expect(accountTest.accountBalance).toBe(100.0);
   });
   it("5- deposit twice; 100 & 600.20", () => {
     accountTest.deposit(100);
@@ -35,7 +35,7 @@ describe("Block 2: Desposit and Withdraw", () => {
   });
   it("6- withdraw 100 once", () => {
     accountTest.withdraw(100);
-    expect(accountTest.accountBalance).toBe(-100);
+    expect(accountTest.accountBalance).toBe(-100.0);
   });
   it("7- withdraw twice; 250 & 110.50", () => {
     accountTest.withdraw(250);
@@ -45,7 +45,7 @@ describe("Block 2: Desposit and Withdraw", () => {
   it("8- withdraw twice; 250 & 110.50", () => {
     accountTest.deposit(2000);
     accountTest.withdraw(1200);
-    expect(accountTest.accountBalance).toBe(800);
+    expect(accountTest.accountBalance).toBe(800.0);
   });
 });
 
@@ -60,7 +60,7 @@ describe("Block 3: Log records", () => {
   it("10- deposit once with date and amount creates log record", () => {
     accountTest.deposit(100, "2022/01/01");
     expect(accountTest.transactionLog).toEqual([
-      { date: "2022/01/01", deposit: 100, balance: 100 },
+      { date: "2022/01/01", deposit: 100.0, balance: 100.0 },
     ]);
   });
   it("11- deposit twice with date and amount creates 2x log records", () => {
@@ -68,22 +68,22 @@ describe("Block 3: Log records", () => {
     accountTest.deposit(200, "2022/01/02");
     expect(accountTest.transactionLog.length).toBe(2);
     expect(accountTest.transactionLog).toEqual([
-      { date: "2022/01/01", deposit: 100, balance: 100 },
-      { date: "2022/01/02", deposit: 200, balance: 300 },
+      { date: "2022/01/02", deposit: 200.0, balance: 300.0 },
+      { date: "2022/01/01", deposit: 100.0, balance: 100.0 },
     ]);
   });
   it("12- withdraw once with date and amount creates log record", () => {
     accountTest.withdraw(1300, "2022/01/03");
     expect(accountTest.transactionLog).toEqual([
-      { date: "2022/01/03", withdraw: 1300, balance: -1300 },
+      { date: "2022/01/03", withdraw: 1300.0, balance: -1300.0 },
     ]);
   });
   it("13- withdraw twice with date and amount creates 2x log records", () => {
     accountTest.withdraw(1300, "2022/01/03");
     accountTest.withdraw(25, "2022/01/04");
     expect(accountTest.transactionLog).toEqual([
-      { date: "2022/01/03", withdraw: 1300, balance: -1300 },
-      { date: "2022/01/04", withdraw: 25, balance: -1325 },
+      { date: "2022/01/04", withdraw: 25.0, balance: -1325.0 },
+      { date: "2022/01/03", withdraw: 1300.0, balance: -1300.0 },
     ]);
   });
   it("14- deposit twice and withdraw once with date and amount creates 3x log records", () => {
@@ -91,9 +91,37 @@ describe("Block 3: Log records", () => {
     accountTest.deposit(1000, "2022/01/06");
     accountTest.withdraw(3500.75, "2022/01/07");
     expect(accountTest.transactionLog).toEqual([
-      { date: "2022/01/05", deposit: 2000, balance: 2000 },
-      { date: "2022/01/06", deposit: 1000, balance: 3000 },
       { date: "2022/01/07", withdraw: 3500.75, balance: -500.75 },
+      { date: "2022/01/06", deposit: 1000.0, balance: 3000.0 },
+      { date: "2022/01/05", deposit: 2000.0, balance: 2000.0 },
     ]);
+  });
+});
+
+describe("Block 4: Print Statements", () => {
+  beforeEach(() => {
+    accountTest = new Account();
+  });
+  it("15- printStatement function returns a header string", () => {
+    expect(accountTest.printStatement()).toContain(
+      "date || debit || credit || balance"
+    );
+  });
+  it("16- printStatement after deposit returns a statement", () => {
+    accountTest.deposit(100, "2022/01/01");
+    expect(accountTest.printStatement()).toContain(
+      "2022/01/01 || 100.00 ||  || 100.00"
+    );
+  });
+  it("17- printStatement after withdraw returns a string", () => {
+    accountTest.withdraw(400.5, "2022/01/04");
+    expect(accountTest.printStatement()).toContain(
+      "2022/01/04 ||  || 400.50 || -400.50"
+    );
+  });
+  it("18- printStatement after withdraw and deposit returns lines in reverse time order", () => {
+    accountTest.withdraw(400, "2022/01/05");
+    accountTest.deposit(700.25, "2022/01/06");
+    expect(accountTest.printStatement()).toBe('date || debit || credit || balance\n2022/01/06 || 700.25 ||  || 300.25\n2022/01/05 ||  || 400.00 || -400.00');
   });
 });

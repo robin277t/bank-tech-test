@@ -10,12 +10,23 @@ class Account {
     console.log(this.instructions);
   }
 
-  deposit(amount) {
+  deposit(amount, date) {
     this.accountBalance += amount;
+    this.createLogRecord("deposit", amount, date);
   }
 
-  withdraw(amount) {
+  withdraw(amount, date) {
     this.accountBalance -= amount;
+    this.createLogRecord("withdraw", amount, date);
+  }
+
+  createLogRecord(logType, amount, date) {
+    let record = { date: date, deposit: amount, balance: this.accountBalance };
+    if (logType === "withdraw") {
+      record.withdraw = record.deposit;
+      delete record.deposit;
+    }
+    this.transactionLog.push(record);
   }
 }
 

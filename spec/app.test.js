@@ -20,7 +20,7 @@ describe("Block 1: Constructor", () => {
   });
 });
 
-describe("Despoit and Withdraw", () => {
+describe("Block 2: Desposit and Withdraw", () => {
   beforeEach(() => {
     accountTest = new Account();
   });
@@ -46,5 +46,54 @@ describe("Despoit and Withdraw", () => {
     accountTest.deposit(2000);
     accountTest.withdraw(1200);
     expect(accountTest.accountBalance).toBe(800);
+  });
+});
+
+describe("Block 3: Log records", () => {
+  beforeEach(() => {
+    accountTest = new Account();
+  });
+  it("9- deposit once creates one record in log", () => {
+    accountTest.deposit(100);
+    expect(accountTest.transactionLog.length).toBe(1);
+  });
+  it("10- deposit once with date and amount creates log record", () => {
+    accountTest.deposit(100, "2022/01/01");
+    expect(accountTest.transactionLog).toEqual([
+      { date: "2022/01/01", deposit: 100, balance: 100 },
+    ]);
+  });
+  it("11- deposit twice with date and amount creates 2x log records", () => {
+    accountTest.deposit(100, "2022/01/01");
+    accountTest.deposit(200, "2022/01/02");
+    expect(accountTest.transactionLog.length).toBe(2);
+    expect(accountTest.transactionLog).toEqual([
+      { date: "2022/01/01", deposit: 100, balance: 100 },
+      { date: "2022/01/02", deposit: 200, balance: 300 },
+    ]);
+  });
+  it("12- withdraw once with date and amount creates log record", () => {
+    accountTest.withdraw(1300, "2022/01/03");
+    expect(accountTest.transactionLog).toEqual([
+      { date: "2022/01/03", withdraw: 1300, balance: -1300 },
+    ]);
+  });
+  it("13- withdraw twice with date and amount creates 2x log records", () => {
+    accountTest.withdraw(1300, "2022/01/03");
+    accountTest.withdraw(25, "2022/01/04");
+    expect(accountTest.transactionLog).toEqual([
+      { date: "2022/01/03", withdraw: 1300, balance: -1300 },
+      { date: "2022/01/04", withdraw: 25, balance: -1325 },
+    ]);
+  });
+  it("14- deposit twice and withdraw once with date and amount creates 3x log records", () => {
+    accountTest.deposit(2000, "2022/01/05");
+    accountTest.deposit(1000, "2022/01/06");
+    accountTest.withdraw(3500.75, "2022/01/07");
+    expect(accountTest.transactionLog).toEqual([
+      { date: "2022/01/05", deposit: 2000, balance: 2000 },
+      { date: "2022/01/06", deposit: 1000, balance: 3000 },
+      { date: "2022/01/07", withdraw: 3500.75, balance: -500.75 },
+    ]);
   });
 });

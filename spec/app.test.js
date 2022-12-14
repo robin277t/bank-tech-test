@@ -13,9 +13,9 @@ describe("Block 1: Constructor", () => {
   it("3- instantiate new Account calls a console.log message", () => {
     const accountTest = new Account();
     expect(accountTest.instructions)
-      .toBe(`Your new account options and the inputs needed are as follows:
-        deposit('YYYY/MM/DD', number)
-        withdraw('YYYY/MM/DD', number)
+      .toBe(`New account created: Your options and the inputs needed are as follows:
+        deposit(number, 'YYYY/MM/DD') --date optional, will revert to today
+        withdraw(number, 'YYYY/MM/DD') --date optional, will revert to today
         printStatement()`);
   });
 });
@@ -129,11 +129,27 @@ describe("Block 4: Print Statements", () => {
 });
 
 describe("Block 5: Edge cases and user testing", () => {
-  it("19- check 'date' argument on 'deposit' function call is most recent", () => {});
+  //There's a very small chance some tests in this block could fail if run exactly at the stroke of midnight...
+  beforeEach(() => {
+    accountTest = new Account();
+    dateToday = new Date().toISOString().slice(0, 10).replace(/-/g, "/");
+  });
+  it("19- ensure 'date' argument called with deposit or withdraw functions is most recent transaction", () => {
+    accountTest.deposit(400, "2022/02/02");
+    accountTest.withdraw(300, "2022/01/01");
+    expect(accountTest.transactionLog[0]).toContain(dateToday);
+  });
+  it("20- ensure 'date' argument called with deposit or withdraw functions is a valid date string", () => {
+    accountTest.deposit(400, "2022/02/02");
+    accountTest.withdraw(300, "2022x033z12");
+    expect(accountTest.transactionLog[0]).toContain(dateToday);
+    expect(accountTest.transactionLog[1]).toContain("2022/02/02");
+  });
+  it("21- check 'amount' argument called with deposit or withdraw functions is a valid number", () => {
+    accountTest.deposit(400, "2022/02/02");
+    accountTest.withdraw("500", "2022/02/03");
+    accountTest.deposit("thirty pounds", "2022/02/02");
+    expect(accountTest.transactionLog[0]).not.toContain("500.00");
+    expect(accountTest.transactionLog[0]).not.toContain("30.00");
+  });
 });
-
-//EXTRA TESTS NEEDED AFTER USER TESTING:
-
-//check date is most recent and of valid format, if it is not then return date(now) as date and a console.log warning
-
-//check amount is a number, otherwise input 0 and console.log a warning

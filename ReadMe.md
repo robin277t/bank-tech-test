@@ -1,7 +1,7 @@
-# README SECTIONS: 
+# Bank account REPL app 
 
 ## Overview:
-    TODO//Explanation of what program does
+    This is a simple nodeJS REPL application, designed to reflect basic operations of a bank account; opening, depositing, withdrawing, and printing statements.
 
 ## Installation:
     These instructions are for MacOS. To run on linux or windows please lookup alternative commands to install and initiate node package manager.
@@ -12,29 +12,27 @@
     4. Once you have node, run 'npm install'
 
 ## Running the app:
-     *In your terminal, assuming the above installation and directory navigation: 
-     *Type 'node' and press enter. This will enter you into the node REPL.
-     *Type '.load app.js' and press enter. This will load the bank app into the REPL.
-     *Type 'newAccount = new Account' and press enter, which will create a new account called newAccount and allow you to use the app. The instructions are relevant to any account name (the 'newAccount' as above is flexible), so to follow them please prefix any function name with 'newAccount.' or whatever you chose.
-    *If at any time you wish to see the instructions again, type 'newAccount.instructions' Remember to prefix any functions you run with 'newAccount.'
-     To close the app and exit the REPL, type '.exit'
+     - In your terminal, assuming the above installation and directory navigation: 
+     - Type 'node' and press enter. This will enter you into the node REPL.
+     - Type '.load app.js' and press enter. This will load the bank app into the REPL.
+     - Type 'newAccount = new Account' and press enter, which will create a new account called newAccount and allow you to use the app. The instructions are relevant to any account name (the 'newAccount' as above is flexible), so to follow them please prefix any function name with 'newAccount.' (or whatever name you chose).
+     - If at any time you wish to see the instructions again, type 'newAccount.instructions' Remember to prefix any functions you run with 'newAccount.' 
+     - To close the app and exit the REPL, type '.exit'
 
 ## Running the tests:
-    In your terminal in the bank-test directory, type 'jest --coverage' You should expect xx passing tests and xx% coverage
+    In your terminal in the bank-test directory, type 'jest --coverage' You should expect 21 passing tests and 100% coverage
 
 
 ## Notes
-    --STILL TODO: 
-    1) Add date sequence warning as part of edge cases investigate. Add to notes.
-    2) Insert error message on deposit or withdraw for data type mismatches and add to notes.
-    3) Resolve or document \n trailing newline issue on printouts in node
-    4) Format this ReadMe Nicely
-    --Negative numbers: Whilst out of keeping with how real-world bank accounts work, this app allows negative balances on the account and repeated/unlimited withdrawals, as a requirement to manage such situations is not in the requirements at present. 
-    --Instructions: requirement is for using with a REPL, and therefore run by someone with basic programming knowledge, and therefore I have deemed it unneccesary to present the app instructions repeatedly on the console, preferring just once upon initialization. However, I have left the code so that repeats can be implemented simply, by adding 'console.log(this.instructions)' where desired in the program.
-    --Date handling: It is not defined but my assumption from the 'Acceptance criteria' given is that date of transaction should be input manually with the method calls rather than timestamped on execution (otherwise the app would need to be kept open for 4 days to test and achieve the desired output). A fututre feature that could be implemented is for the program to default to getting the 'now' timestamp for the debit/withdraw when methods are called, unless user inputs a correctly formatted date as an argument when calling the method which will over-ride the default.
+    - Numerical input and validation: This app requires that input amounts for deposit and withdraw are valid numbers, strings containing numbers (eg "500") are not acceptable. App will round to 2 decimal places when logging all transactions and updating balances. 
+    - Date handling: It is not defined but my assumption from the 'Acceptance criteria' given is that date of transaction should be able to be input manually with the method calls, rather than purely timestamped on execution. The functions deposit and withdraw can be called with a date, or in the absense of a date will default to taking a current timestamp.
+    - Negative numbers: Whilst out of keeping with how real-world bank accounts work, this app allows negative balances on the account and repeated/unlimited withdrawals, as managing such situations is not in the requirements at present. 
+    - Usage instructions: requirement is for using with a REPL, and therefore run by someone with basic programming knowledge, and therefore I have deemed it unneccesary to present the app instructions repeatedly on the console, preferring just once upon initialization. However, I have left the code so that repeats can be implemented simply, by adding 'console.log(this.instructions)' where desired in the program.
+    - Trailing newline characters in string outputs in the REPL ('\n') . This is an annoying feature of using javascript in node REPL, and is how it will come out without writing more code. As above, assumed user is a programmer and therefore familiar with ignoring such characters.
+    - *Improvements:* This app would be improved with a command line interface rather than being run in the node REPL, but was not in scope here. Using the *Ruby REPL* would have also presented the app in a cleaner way with less typing required to execute features.
 
 
-# BLUEPRINT OF THE APP:
+## BLUEPRINT OF THE APP:
 
 Class 'Account' (this will be the only class)
     
@@ -49,26 +47,28 @@ Class 'Account' (this will be the only class)
         console.log(this.instructions)
 
     method: deposit(amount, date)
-        if input wrong type then return && (console.log error message explaining required format)
-        else adds amount to accountBalance
+        checks amount is valid number
+        adds amount to accountBalance
         calls logDeposit ("deposit" amount, date)
         return (`deposit of ${amount }successful, new balace is ${this.accountBalance}`)
 
     method: withdraw(amount, date)
-        if input wrong type then return && (console.log error message explaining required format)
+        checks amount is valid number
         removes amount from accountBalance 
         calls logWithdraw ("withdraw", amount, date)
         return (`withdrawal of ${amount }successful, new balace is ${this.accountBalance}`)
     
     method: createLogRecord(type, date, amount)
-        creates a JS object with date, amount deposited, and accountBalance and pushes into log array
+        creates a strong with date, amount deposited or withdrawn, and accountBalance and pushes into log array
 
     method: printStatement
-        if transactionsLog is empty, console.log(no activity to show yet on this account)
-        else print header, and then each item of log array in reverse date order on a newline, stringified
+       print header, and then each item of log array in reverse date order on a newline
+
+    method: dateCheck (date)
+        takes date and returns today's date if date incorrect, or absent
 
 
-# TESTS:
+## TESTS:
 
     Test Block 1: constructor
         1 - instantiate new Account > expect this.accountBalance === 0 
@@ -92,13 +92,19 @@ Class 'Account' (this will be the only class)
         13 - withdraw 1300, 2022/01/03, and withdraw 25, 2022/01/04 > expect this.transactionLog === [{date: '2022/01/03', withdraw: 1300, balance: -1300 }, {date: '2022/01/04', withdraw: 1300, balance: -1325 }]
         14 - deposit 2000, 2022/01/05, and deposit 1000, 2022/01/06 and withdraw 3500.75, 2022/01/07 > expect this.transactionLog === [{date: '2022/01/05', deposit: 2000, balance: 2000 }, {date: '2022/01/06', deposit: 1000, balance: 3000}, {date: '2022/01/07', withdraw: 3500, balance: -500.75}]
 
-
     Test Block 4: print statements
     --before each instantiate new Account--
         15 - deposit 100, 2022/01/01, call printStatement > expect line 1 === "date || debit || credit || balance"
         16 - deposit 100, 2022/01/01, call printStatement > expect line 2 === "2022/01/01 || 100.00 ||  || 100.00"
         17 - withdraw 400.50, 2022/01/04, call printStatement > expect line 2 === "2022/01/04 || || 400.50 || -400.50"
         18 - withdraw 400, 2022/01/05, deposit 700.25, 2022/01/06, call printStatement > expect === "date || debit || credit || balance\n2022/01/05 || || 400.00 || -400.00\n2022/01/06 || 700.25 ||  || 300.25
+
+    Test Block 5: Edge cases and user testing (input validation)
+    --before each instantiate new Account--
+        19 - deposit on 2022/02/02 then withdraw on 2022/01/01 > expect transactionLog[0] to contain today's date
+        20 - deposit(400, "2022/02/02") then deposit(300, "wrongString") > expect transactionLog[0] to contain today's date
+        21 - call withdraw and deposit with non numerical first arguments > expect neither to show up in transactionLog
+
 
 
 

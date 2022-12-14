@@ -24,6 +24,11 @@
 
 
 ## Notes
+    --STILL TODO: 
+    1) Add date sequence warning as part of edge cases investigate. Add to notes.
+    2) Insert error message on deposit or withdraw for data type mismatches and add to notes.
+    3) Resolve or document \n trailing newline issue on printouts in node
+    4) Format this ReadMe Nicely
     --Negative numbers: Whilst out of keeping with how real-world bank accounts work, this app allows negative balances on the account and repeated/unlimited withdrawals, as a requirement to manage such situations is not in the requirements at present. 
     --Instructions: requirement is for using with a REPL, and therefore run by someone with basic programming knowledge, and therefore I have deemed it unneccesary to present the app instructions repeatedly on the console, preferring just once upon initialization. However, I have left the code so that repeats can be implemented simply, by adding 'console.log(this.instructions)' where desired in the program.
     --Date handling: It is not defined but my assumption from the 'Acceptance criteria' given is that date of transaction should be input manually with the method calls rather than timestamped on execution (otherwise the app would need to be kept open for 4 days to test and achieve the desired output). A fututre feature that could be implemented is for the program to default to getting the 'now' timestamp for the debit/withdraw when methods are called, unless user inputs a correctly formatted date as an argument when calling the method which will over-ride the default.

@@ -36,8 +36,8 @@ In your terminal in the bank-test directory, type 'jest --coverage' You should e
 
 ## BLUEPRINT OF THE APP:
 ```
-Class 'Account' (this will be the only class)
-    
+Class: Account:
+
 method: constructor 
     this.accountBalance = 0
     this.transactionsLog = []
@@ -46,6 +46,11 @@ method: constructor
     "withdraw('YYYY/MM/DD', number)"
     "printStatement()"
     console.log(this.instructions)
+    
+method: createLogRecord(type, date, amount)
+    creates a string with date, amount deposited or withdrawn, and accountBalance and pushes into log array of transaction instances
+
+Class: Transactions: 
 
 method: deposit(amount, date)
     checks amount is valid number
@@ -59,14 +64,16 @@ method: withdraw(amount, date)
     calls logWithdraw ("withdraw", amount, date)
     return (`withdrawal of ${amount }successful, new balace is ${this.accountBalance}`)
 
-method: createLogRecord(type, date, amount)
-    creates a strong with date, amount deposited or withdrawn, and accountBalance and pushes into log array
-
-method: printStatement
-    print header, and then each item of log array in reverse date order on a newline
-
 method: dateCheck (date)
     takes date and returns today's date if date incorrect, or absent
+
+
+Class: Statement Printer
+
+method: printStatement(account)
+    print header, and then each item of log array in reverse date order on a newline
+
+
 ```
 
 ## TESTS:
